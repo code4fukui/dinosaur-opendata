@@ -1,7 +1,9 @@
 <!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="icon" href="data:">
-<title>恐竜博物館 予約状況（データ出典：福井県）</title>
+<title>恐竜博物館ダッシュボード</title>
 </head><body>
-<h1>恐竜博物館 予約状況（データ出典：福井県）</h1>
+<h1>恐竜博物館ダッシュボード</h1>
+
+<h2>60日先までの予約状況（人数、金額、平均単価）</h2>
 <div id=chart></div>
 
 <script type="module">
@@ -119,15 +121,33 @@ show();
 <div class=caption>
 福井県立恐竜博物館の予約状況オープンデータです。<br>
 「<a href=latest_dino_sum.csv>CSVオープンデータ ダウンロード</a>」（<span id=span_date></span>現在）<br>
-<a href=./dinosaur-fukui.html>福井で発見された恐竜オープンデータ</a><br>
-</div>
-<a href=https://code4fukui.github.io/fukui-kanko-advice/area/19.html>福井県AI観光アドバイス - 勝山市 / スーベニアショップ ラプトル エリア</a><br>
+（関連リンク、<a href=https://code4fukui.github.io/fukui-kanko-advice/area/19.html>福井県AI観光アドバイス - 勝山市 / スーベニアショップ ラプトル エリア</a>、
+<a href=https://code4fukui.github.io/fukui-kanko-stat/>福井県観光アンケートオープンデータ活用アプリ</a>）<br>
 <br>
-<a href=https://code4fukui.github.io/fukui-kanko-stat/>福井県観光アンケートオープンデータ活用アプリ</a><br>
-<hr>
 
-データ出典: <a href=FPDM: 福井県立恐竜博物館>FPDM: 福井県立恐竜博物館</a>（協力：<a href=https://www.fuku-e.com/feature/detail_266.html>福井県観光データ分析システム「FTAS」</a> by <a href=https://www.fuku-e.com/>福井県観光連盟</a>）<br>
-データ収集＆アプリ: <a href=https://github.com/code4fukui/dinosaur-opendata/>オープンソース on GitHub</a> by <a href=https://code4fukui.github.io/>Code for FUKUI</a><br>
+<h2>福井で発見された恐竜オープンデータ</h2>
+<script type="module" src="https://code4sabae.github.io/js/csv-viewer.js"></script>
+<csv-viewer src=./dinosaur-fukui.csv></csv-viewer>
+<style>
+csv-viewer {
+  word-break: break-all;
+}
+csv-viewer td:nth-child(2) {
+  white-space: nowrap;
+}
+csv-viewer td, th {
+  border: 1px solid black;
+  padding: 0 .5em;
+}
+csv-viewer table {
+  margin: .5em 0;
+  border-collapse: collapse;
+}
+</style>
+<!--
+<a href=./dinosaur-fukui.html>福井で発見された恐竜オープンデータ</a><br>
+-->
+</div>
 
 <style>
 body {
@@ -143,4 +163,9 @@ a {
   color: gray !important;
 }
 </style>
+
+<hr>
+データ出典: <a href=FPDM: 福井県立恐竜博物館>FPDM: 福井県立恐竜博物館</a>（協力：<a href=https://www.fuku-e.com/feature/detail_266.html>福井県観光データ分析システム「FTAS」</a> by <a href=https://www.fuku-e.com/>福井県観光連盟</a>）<br>
+データ収集＆アプリ: <a href=https://github.com/code4fukui/dinosaur-opendata/>オープンソース on GitHub</a> by <a href=https://code4fukui.github.io/>Code for FUKUI</a><br>
+
 </body></html>
