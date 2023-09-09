@@ -1,0 +1,26 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="icon" href="data:">
+<title>福井で発見された恐竜オープンデータ</title>
+</head><body>
+<h1>福井で発見された恐竜オープンデータ</h1>
+
+<script type="module" src="https://code4sabae.github.io/js/csv-viewer.js"></script>
+<csv-viewer src=./dinosaur-fukui.csv></csv-viewer>
+<style>
+csv-viewer {
+  word-break: break-all;
+}
+csv-viewer td:nth-child(2) {
+  white-space: nowrap;
+}
+csv-viewer td, th {
+  border: 1px solid black;
+  padding: 0 .5em;
+}
+csv-viewer table {
+  margin: .5em 0;
+  border-collapse: collapse;
+}
+</style>
+
+<hr>
+<a href=https://github.com/code4fukui/dinosaur-opendata>src on GitHub</a>
