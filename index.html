@@ -1,0 +1,162 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="icon" href="data:">
+<title>あわら温泉エリア 宿泊予約状況（データ出典：福井県観光連盟）</title>
+</head><body>
+<h1>あわら温泉エリア 宿泊予約状況（データ出典：福井県観光連盟）</h1>
+<div id=chart></div>
+
+<script type="module">
+import { CSV } from "https://js.sabae.cc/CSV.js";
+import { Day } from "https://js.sabae.cc/DateTime.js";
+import { initC3 } from "https://code4fukui.github.io/c3-es/c3-es.js";
+const c3 = initC3(window);
+
+const capacity = 407;
+
+const getFile = async (fn) => {
+  const url = `./latest_rsv_sum.csv`;
+  const csv = await CSV.fetch(url);
+  const map = {
+    "n_room": "室数",
+    "n_people": "利用総人数",
+    "n_stay": "泊数",
+    "amount_fee": "利用合計",
+    "n_reserve": "予約件数",
+    "date_visit": "利用開始日",
+  };
+  console.log(csv[0])
+  for (let i = 0; i < csv[0].length; i++) {
+    csv[0][i] = map[csv[0][i]];
+  }
+  return CSV.toJSON(csv);
+};
+
+const makeColumns = (data, startday, colnames) => {
+  const dates = [];
+  //const startday = new Day();
+  const endday = startday.dayAfter(90);
+  for (let d = startday; !d.equals(endday); d = d.dayAfter(1)) {
+    dates.push(d.toStringYMD());
+  }
+  dates.unshift("x")
+  console.log(dates);
+
+  const cols = [];
+  cols.push(dates);
+  for (let j = 0; j < colnames.length; j++) {
+    const colname = colnames[j];
+
+    const nrsv = [];
+    nrsv.push(colname);
+    for (const d of data) {
+      nrsv.push(parseInt(d[colname]));
+    }
+    cols.push(nrsv);
+  }
+  return cols;
+};
+
+const NAME_FEE = "利用合計";
+const NAME_OCC = "客室稼働率 (OCC)";
+const NAME_ADR = "客室平均単価 (ADR)";
+const NAME_AVE = "客平均単価";
+const NAME_REVPAR = "RevPAR (OCC x ADR)";
+
+const showChart = (bindto, columns) => {
+  const axes = {};
+  for (const n of [NAME_FEE, NAME_AVE, NAME_ADR, NAME_REVPAR]) {
+    axes[n] = "y2";
+  }
+  const chart = c3.generate({
+    bindto: '#chart',
+    data: {
+      x: 'x',
+      xFormat: '%Y%m%d', // 'xFormat' can be used as custom format of 'x'
+      columns,
+      axes,
+    },
+    axis: {
+      x: {
+        type: 'timeseries',
+        tick: {
+          format: '%Y-%m-%d'
+        }
+      },
+      y2: {
+        show: true,
+      },
+    },
+    tooltip: {
+      format: {
+        value: (value) => d3.format(",")(value),
+      }
+    },
+  });
+};
+
+const show = async () => {
+  const colnames = ["利用総人数", "室数", "泊数", NAME_FEE];
+  
+  const data = await getFile();
+  console.log(data);
+  const startday = new Day(data[0].date_visit);
+  
+  const columns = makeColumns(data, startday, colnames);
+  console.log("columns", columns);
+  
+  const occ = [NAME_OCC];
+  const adr = [NAME_ADR];
+  const adr2 = [NAME_AVE];
+  const revpar = [NAME_REVPAR];
+  for (let i = 1; i < columns[0].length; i++) {
+    // columns[0] // date
+    const people = columns[1]; // 人数
+    const room = columns[2]; // 室数
+    const amount = columns[4]; // 利用合計
+    occ[i] = (parseInt(room[i]) / capacity * 100).toFixed(1);
+    adr[i] = (parseInt(amount[i]) / parseInt(room[i])).toFixed(0);
+    adr2[i] = (parseInt(amount[i]) / parseInt(people[i])).toFixed(0);
+    revpar[i] = (occ[i] / 100 * adr[i]).toFixed(0);
+  }
+  columns.push(adr2);
+  columns.push(occ);
+  columns.push(adr);
+  columns.push(revpar);
+  //([occ, adr, revpar]);
+  
+  showChart("chart", columns);
+  span_date.textContent = new Day(columns[0][1]).toString();
+};
+show();
+
+</script>
+
+<div class=caption>
+福井県あわら温泉エリア、8つのホテル（総部屋数407）の予約状況を合算したオープンデータです。<br>
+「<a href=latest_rsv_sum.csv>CSVオープンデータ ダウンロード</a>」（<span id=span_date></span>現在）<br>
+<br>
+客室稼働率 OCC = Occupancy Ratio = 予約客室数 / 総客室数<br>
+客室平均単価 ADR = Average Daily Rate = 販売額 / 予約客室数<br>
+RevPAR = Revenue Per Available Rooms = 販売額 / 総客室数 = OCC x ADR<br>
+</div>
+<a href=https://code4fukui.github.io/fukui-kanko-advice/area/11.html>福井県AI観光アドバイス - あわら湯のまち エリア</a><br>
+<br>
+<a href=https://code4fukui.github.io/fukui-kanko-stat/>福井県観光アンケートオープンデータ活用アプリ</a><br>
+<hr>
+データ出典: <a href=https://www.fuku-e.com/feature/detail_266.html>福井県観光データ分析システム「FTAS」｜特集｜【公式】福井県 観光/旅行サイト ｜ ふくいドットコム</a> by <a href=https://www.fuku-e.com/>福井県観光連盟</a><br>
+データ収集＆アプリ: <a href=https://github.com/code4fukui/fukui-kanko-reservation/>オープンソース on GitHub</a> by <a href=https://code4fukui.github.io/>Code for FUKUI</a><br>
+
+<style>
+body {
+  text-align: center;
+}
+#chart {
+  height: 50vh;
+}
+.caption {
+  margin: 1em;
+}
+a {
+  color: gray !important;
+}
+</style>
+</body></html>
