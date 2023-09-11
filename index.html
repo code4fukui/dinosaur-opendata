@@ -97,7 +97,7 @@ const show = async () => {
   
   const data = await getFile();
   console.log(data);
-  const startday = new Day(data[0].date_visit);
+  const startday = new Day(data[0].利用開始日);
   
   const columns = makeColumns(data, startday, colnames);
   console.log("columns", columns);
