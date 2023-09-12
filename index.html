@@ -4,6 +4,7 @@
 <h1>恐竜博物館ダッシュボード</h1>
 
 <h2>60日先までの予約状況（人数、金額、平均単価）</h2>
+<h4>※<span class=span_date></span>時点の事前予約数です。最終的な予約数や入館者数は異なります。</h4>
 <div id=chart></div>
 
 <script type="module">
@@ -112,7 +113,10 @@ const show = async () => {
   columns.push(adr2);
   
   showChart("chart", columns);
-  span_date.textContent = new Day(columns[0][1]).toString();
+  const span_date = new Day(columns[0][1]).toString();
+  for (let i = 0; i < document.getElementsByClassName("span_date").length; i++ ) {
+    document.getElementsByClassName("span_date")[i].textContent = span_date;
+  }
 };
 show();
 
@@ -120,7 +124,7 @@ show();
 
 <div class=caption>
 福井県立恐竜博物館の予約状況オープンデータです。<br>
-「<a href=latest_dino_sum.csv>CSVオープンデータ ダウンロード</a>」（<span id=span_date></span>現在）<br>
+「<a href=latest_dino_sum.csv>CSVオープンデータ ダウンロード</a>」（<span class=span_date></span>現在）<br>
 （関連リンク、<a href=https://code4fukui.github.io/fukui-kanko-advice/area/19.html>福井県AI観光アドバイス - 勝山市 / スーベニアショップ ラプトル エリア</a>、
 <a href=https://code4fukui.github.io/fukui-kanko-stat/>福井県観光アンケートオープンデータ活用アプリ</a>）<br>
 <br>
@@ -162,6 +166,15 @@ body {
 }
 a {
   color: gray !important;
+}
+h2 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+h4 {
+  margin-top: 0;
+  margin-bottom: 0;
+  color: #AAA;
 }
 </style>
 
