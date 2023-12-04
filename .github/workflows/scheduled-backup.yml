@@ -1,6 +1,7 @@
 name: Scheduled 
 
 on:
+  workflow_dispatch:
   schedule:
     # 3:31分に実行 3(JST)-9+24=18(UTC)
     - cron: '31 18 * * *'
