@@ -22,4 +22,4 @@ deno run -A update.js [url to get summary_dino.json]
 This will fetch the latest data from the specified URL and update the CSV files in the `data/` directory.
 
 ## License
-This project is licensed under the MIT License.
+MIT License — see [LICENSE](LICENSE).
