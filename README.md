@@ -69,8 +69,8 @@ To run the update script manually, you need the Deno runtime.
 ```sh
 # Install Deno: https://deno.land/manual/getting_started/installation
 
-# Run the update script with the data source URL
-deno run -A update.js [URL_TO_SUMMARY_DINO_JSON]
+# Run the update script with the data source URL,private key,public key
+deno run -A update.js [URL_TO_SUMMARY_DINO_JSON] [KEY] [CERT]
 ```
 
 The data source URL is stored as a GitHub secret (`secrets.secret`) for the automated workflow.
