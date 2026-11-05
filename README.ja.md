@@ -67,8 +67,8 @@
 ```sh
 # Denoのインストール: https://deno.land/manual/getting_started/installation
 
-# データソースURLを指定して更新スクリプトを実行
-deno run -A update.js [URL_TO_SUMMARY_DINO_JSON]
+# データソースURL、秘密鍵、公開鍵を指定して更新スクリプトを実行
+deno run -A update.js [URL_TO_SUMMARY_DINO_JSON] [KEY] [CERT]
 ```
 
 データソースURLは、自動化ワークフロー用のGitHubシークレット（`secrets.secret`）として保存されています。
